@@ -1,0 +1,2 @@
+include directory for cpp/hpp/lib/dll linking files of modules:
+  - opencv

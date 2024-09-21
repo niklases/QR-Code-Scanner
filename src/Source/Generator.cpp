@@ -5,6 +5,7 @@
 
 #include "../Header/Generator.hpp"
 #include "../Header/Filesystem.hpp"
+#include <opencv2/imgproc/types_c.h>
 
 
 using namespace std;

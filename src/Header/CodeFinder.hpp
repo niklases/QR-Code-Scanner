@@ -3,6 +3,7 @@
 
 #include <opencv2/core/core.hpp>
 #include "FinderPatternModel.hpp"
+#include <opencv2/imgproc/types_c.h>
 
 
 /**
@@ -31,6 +32,8 @@ public:
 	void showAll();
 	void saveDrawTo(const std::string& folder, const std::string& imageFilePath);
 	void saveDrawCustomTo(const std::string& folder, const std::string& imageFilePath);
+
+	std::string Decode(cv::OutputArray qrcode = cv::noArray());  // ADDED
 
 protected:
     cv::Mat drawContours(std::vector<std::vector<cv::Point>> &vecs,
@@ -98,6 +101,8 @@ private:
 
 	/* Array with colors for debugging. */
     std::vector<cv::Scalar> debuggingColors;
+
+	cv::QRCodeDetector qrcodeDecoder;  // ADDED
 };
 
 

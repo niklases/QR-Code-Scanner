@@ -3,9 +3,38 @@
 #include "../Header/ImageBinarization.hpp"
 #include <opencv2/highgui/highgui.hpp>
 #include "../Header/Filesystem.hpp"
+#include <opencv2/imgproc/types_c.h>
+#include <opencv2/imgproc.hpp>
 
 using namespace std;
 using namespace cv;
+
+
+
+
+std::string CodeFinder::Decode(OutputArray qrcode) {
+	//find();  // CodeFinder::find();
+
+	vector<Mat> extracted = drawExtractedCodes();
+	for (int i = 0; i < extracted.size(); i++) {
+		int w = extracted[i].cols - 1;
+		int h = extracted[i].rows - 1;
+		std::vector<Point2i> bbox = { Point2i(0, 0), Point2i(w, 0), Point2i(w,h), Point2i(0,h) };
+		std::string data = qrcodeDecoder.decode(extracted[i], bbox);  // cv internal/implemented function to read QR codes
+		if (data.length() > 0) {
+			if (qrcode.needed()) {
+				extracted[i].copyTo(qrcode);
+			}
+			else {
+				qrcode.release();
+			}
+			return data;
+		}
+	}
+	return std::string();
+}
+
+
 
 
 /**
@@ -65,6 +94,10 @@ Mat CodeFinder::find() {
 	cout << "Converting image to binary image..." << endl;
 	Mat grayscaleImage;
 	cvtColor(image, grayscaleImage, CV_BGR2GRAY);
+	// DEBUG
+	//cv::imshow("grayscale", grayscaleImage);
+	//cv::waitKey();
+
 
 	ImageBinarization binarizer;
 	int thresholdMethod = -1;
@@ -136,7 +169,7 @@ Mat CodeFinder::find() {
 				}
 
 				cout << "Finding corners..." << endl;
-				findCorners(code);
+				findCorners(code);  // CHECK IFDEF HERE
 
 				cout << "Finding perspective transform..." << endl;
 				try
@@ -551,12 +584,16 @@ bool CodeFinder::findMergedLines(QRCode &code) {
  * \param code Code containing merged lines.
  */
 void CodeFinder::findCorners(QRCode &code) {
-	code.corners = Mat(4, 4, DataType<Point2f>::type);
+	cout << "XXXXXXXXXX" << endl;   // DEBUG
+	code.corners = Mat(4, 4, CV_32FC2);// DataType<Point2f>::type);    versus    CV_32FC2
 	for (int a = 0; a < code.hLines.size(); a++) {
 		for (int b = 0; b < code.vLines.size(); b++) {
 			Point2f result;
 			if (lineIntersection(code.hLines[a], code.vLines[b], result))
+			{
 				code.corners.at<Point2f>(a, b) = result;
+				cout << code.corners.at<Point2f>(a, b) << endl;   // DEBUG
+			}
 		}
 	}
 }
@@ -574,7 +611,7 @@ void CodeFinder::findPerspectiveTransform(QRCode &code)
 	sourceQuad.push_back(code.corners.at<Point2f>(3, 0));
 	sourceQuad.push_back(code.corners.at<Point2f>(0, 3));
 	sourceQuad.push_back(code.corners.at<Point2f>(3, 3));
-
+	cout << sourceQuad;  // DEBUG
 	//Check if points are negative
 	for (Point2f p : sourceQuad) {
 		if (p.x < 0 || p.y < 0) {
@@ -594,6 +631,7 @@ void CodeFinder::findPerspectiveTransform(QRCode &code)
 
 	// Find the longest distance between corners and use it as the target size.
 	double distance = 0.0f;
+	cout << endl << "distance init: " << distance;
 	for (Point2f& p1 : sourceQuad)
 	{
 		for (Point2f& p2 : sourceQuad)
@@ -604,6 +642,7 @@ void CodeFinder::findPerspectiveTransform(QRCode &code)
 				distance = distanceCurrent;
 		}
 	}
+	cout << endl << "Max. distance: " << distance << endl;
 
 	// Mutliply by two for increased quality of extraction result.
 	distance = distance * 2;

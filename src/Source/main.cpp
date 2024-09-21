@@ -6,6 +6,7 @@
 #include "../Header/Generator.hpp"
 #include "../Header/CodeFinder.hpp"
 
+
 using namespace std;
 using namespace cv;
 
@@ -120,6 +121,11 @@ void cameraMode() {
 
 		CodeFinder codeFinder(frame, false);
 		Mat outputImage = codeFinder.find();
+		std::string k = codeFinder.Decode();
+		cout << endl << "Resulting string: " << k << endl << endl;
+		if (!k.empty())
+			break;  // found a string
+			
 
 		vector<Mat> merged = codeFinder.drawMergedLinesAndIntersections();
 		for (int i = 0; i < merged.size(); i++) {
@@ -153,9 +159,9 @@ void folderMode(const string &source) {
 
 	char confirm;
 	cout << "Do you want to read all these files and test QR-Code Algorithm? If yes press 'y':  ";
-	cin >> confirm;
+	//cin >> confirm;
 
-	if (confirm == 'y') {
+	//if (confirm == 'y') {
 		cout << "Now start iterating through all Images.." << endl;
 		float evaluateAverage = 0;
 		float detected = 0;
@@ -169,6 +175,8 @@ void folderMode(const string &source) {
 			Mat image = fs.loadImage(imageFiles[i]);
 			CodeFinder codeFinder(image, false);
 			Mat outputImage = codeFinder.find();
+			std::string k = codeFinder.Decode();
+			cout << endl << "Resulting string: " << k << endl << endl;
 
 			// Code for debugging and evaluating.
 			if (outputImage.size().width != 1)
@@ -201,10 +209,10 @@ void folderMode(const string &source) {
 			average = evaluateAverage / evaluateCount;
 		cout << "#Images: " << imageFiles.size() << " #QRCodesDetected: " << detected <<
 			" #CorrectSize: " << evaluateCount << " AverageQuality: " << average << "%" << endl;
-	}
-	else {
-		cout << endl << "Aborted." << endl << endl;
-	}
+	//}
+	//else {
+	//	cout << endl << "Aborted." << endl << endl;
+	//}
 }
 
 /**

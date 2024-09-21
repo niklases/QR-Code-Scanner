@@ -9,6 +9,7 @@
 #include <sys/stat.h>
 
 #endif
+#include <opencv2/imgcodecs/legacy/constants_c.h>
 
 using namespace std;
 
