@@ -19,7 +19,7 @@ workspace "QRCode"
     kind "SharedLib"
     architecture "x64"
 
-project "HelloWorld"
+project "QRCode"
    kind "ConsoleApp"
    language "C++"
    targetdir "bin/%{cfg.buildcfg}"

@@ -57,3 +57,10 @@ ScanNegative
 *.bbl
 /include/opencv
 /QRCode/
+build/obj/
+build/bin/
+build/.vs/
+build/QRCode.sln
+build/QRCode.vcxproj
+build/QRCode.vcxproj.user
+include/opencv-4.10.0-windows.exe
