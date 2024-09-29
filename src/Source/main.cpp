@@ -1,5 +1,7 @@
 #include <iostream>
 #include <ctime>
+#include <windows.h>
+#include <shellapi.h>
 #include <opencv2/opencv.hpp>
 #include "../Header/ImageBinarization.hpp"
 #include "../Header/Filesystem.hpp"
@@ -122,10 +124,27 @@ void cameraMode() {
 		CodeFinder codeFinder(frame, false);
 		Mat outputImage = codeFinder.find();
 		std::string k = codeFinder.Decode();
-		cout << endl << "Resulting string: " << k << endl << endl;
 		if (!k.empty())
-			break;  // found a string
-			
+		{
+			cout << endl << "Resulting string: " << k << endl << endl;
+			destroyAllWindows();  // found a string, close CV video 
+			if (k.substr(0, 4) == "http")
+			{
+				char confirm{};
+				cout << "Found the string in the QR-Code that starts with 'http(s)://', "
+					"do you want to try opening that string in the webbrowser? (Y/N)" << endl;
+				cin >> confirm;
+				if (confirm == 'y' || confirm == 'Y')
+				{	
+					// Initializing an object of wstring
+					wstring temp = wstring(k.begin(), k.end());
+					// Applying c_str() method on temp
+					LPCWSTR wideString = temp.c_str();
+					ShellExecute(0, 0, wideString, 0, 0, SW_SHOW);
+				}
+			}
+			break;
+		}
 
 		vector<Mat> merged = codeFinder.drawMergedLinesAndIntersections();
 		for (int i = 0; i < merged.size(); i++) {
@@ -157,7 +176,7 @@ void folderMode(const string &source) {
 	}
 	cout << endl;
 
-	char confirm;
+	//char confirm;
 	cout << "Do you want to read all these files and test QR-Code Algorithm? If yes press 'y':  ";
 	//cin >> confirm;
 
