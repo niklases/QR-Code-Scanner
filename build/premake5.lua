@@ -26,14 +26,22 @@ project "QRCode"
 
    files { "../src/Header/**.h", "../src/Source/**.cpp" }
    
-   includedirs { "../include/opencv/build/include" }
- 
-   libdirs { "../include/opencv/build/x64/vc16/lib", "../include/opencv/build/x64/vc16/bin" }
+   -- WINDOWS
+   filter "system:windows"
+      includedirs { "../include/opencv/build/include" }
+      libdirs { "../include/opencv/build/x64/vc16/lib", "../include/opencv/build/x64/vc16/bin" }
+      filter {"system:windows", "Debug"}
+         links { "opencv_world4100d.lib" }
+      filter {"system:windows", "Release"}
+         links { "opencv_world4100.lib" }
    
-   filter "Debug"
-      links { "opencv_world4100d.lib" }
-   filter "Release"
-      links { "opencv_world4100.lib" }
+   -- LINUX  
+   filter "system:linux"
+      includedirs { "/usr/local/include/opencv4"}
+      libdirs { "/usr/local/lib" }
+      links {"opencv_stitching", "opencv_highgui", "opencv_ml", "opencv_videoio", "opencv_video", 
+             "opencv_objdetect", "opencv_calib3d", "opencv_imgcodecs", "opencv_features2d",
+             "opencv_dnn", "opencv_flann", "opencv_photo", "opencv_imgproc", "opencv_core"}
    
    filter "configurations:Debug"
       defines { "DEBUG" }
@@ -42,9 +50,9 @@ project "QRCode"
    filter "configurations:Release"
       defines { "NDEBUG" }
       optimize "On"
-	  
-   filter "Debug"
+	
+   filter "system:windows"
+      filter {"system:windows", "Debug"}
    	   postbuildcommands { "copy $(SolutionDir)..\\include\\opencv\\build\\x64\\vc16\\bin\\opencv_world4100d.dll   $(SolutionDir)bin\\Debug\\opencv_world4100d.dll" }
-	   
-   filter "Release"
+      filter {"system:windows", "Release"}
    	   postbuildcommands { "copy $(SolutionDir)..\\include\\opencv\\build\\x64\\vc16\\bin\\opencv_world4100.dll   $(SolutionDir)bin\\Release\\opencv_world4100.dll" }

@@ -1,3 +1,12 @@
+#### Fork of QR-Code-Scanner 
+forked from https://github.com/PhilS94/QR-Code-Scanner.
+
+For Windows systems, a Visual Studio (VS 2022) Project Solution (.sln) can be build using Premake running/double clicking the file *build.bat*. Further, pre-compiled libraries of OpenCV are downloaded from GitHub and extracted. The Solution file can subsequently be used to compile this projects source files and to link against the OpenCV library files to successfully run the built *QRCode.exe*.
+
+For building this project for Linux systems, *build.sh* can be executed, which downloads the OpenCV source from GitHub, compiles OpenCV module files (takes several minutes) and installs the shared object (.so) OpenCV module library files with make to store them in */usr/local/lib*. Subsequently, Premake is used to configure the make build and linking process and finally make is used to compile the project source files and link them to the shared objects of the required OpenCV modules.
+
+-------------------------------
+
 ## QR-Code-Scanner 
 A QR-Code Scanner, written in C++ and using the OpenCV library, which was developed as an optional part of the university course "Computer Vision" in a small team of three.
 

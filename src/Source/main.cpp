@@ -123,12 +123,12 @@ void cameraMode() {
 
 		CodeFinder codeFinder(frame, false);
 		Mat outputImage = codeFinder.find();
-		std::string k = codeFinder.Decode();
-		if (!k.empty())
+		std::string decodedText = codeFinder.Decode();
+		if (!decodedText.empty())
 		{
-			cout << endl << "Resulting string: " << k << endl << endl;
+			cout << endl << "Resulting string: " << decodedText << endl << endl;
 			destroyAllWindows();  // found a string, close CV video 
-			if (k.substr(0, 4) == "http")
+			if (decodedText.substr(0, 4) == "http")
 			{
 				char confirm{};
 				cout << "Found the string in the QR-Code that starts with 'http(s)://', "
@@ -137,7 +137,7 @@ void cameraMode() {
 				if (confirm == 'y' || confirm == 'Y')
 				{	
 					// Initializing an object of wstring
-					wstring temp = wstring(k.begin(), k.end());
+					wstring temp = wstring(decodedText.begin(), decodedText.end());
 					// Applying c_str() method on temp
 					LPCWSTR wideString = temp.c_str();
 					ShellExecute(0, 0, wideString, 0, 0, SW_SHOW);

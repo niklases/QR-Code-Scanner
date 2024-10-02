@@ -1,3 +1,12 @@
+
+include/opencv/
+
+# Output files
+QRCode/x64/Debug/
+
+###########
+# Auto template
+###########
 # Clion
 .idea
 
@@ -55,12 +64,24 @@ ScanNegative
 *.toc
 *.blg
 *.bbl
-/include/opencv
-/QRCode/
+
+/QRCode/Debug
+QRCode/x64/Release/
+build/HelloWorld.sln
+build/HelloWorld.vcxproj
 build/obj/
-build/bin/
 build/.vs/
+build/bin/Debug/
+build/bin/Release/
+build/opencv.zip
+build/HelloWorld.vcxproj.user
+build/HelloWorld.vcxproj.filters
+QRCode.vcxproj.user
+include/opencv-4.10.0-windows.exe
+
+build/Makefile
+build/QRCode.make
 build/QRCode.sln
 build/QRCode.vcxproj
-build/QRCode.vcxproj.user
-include/opencv-4.10.0-windows.exe
+build/opencv-4.x/
+build/opencv_build/
