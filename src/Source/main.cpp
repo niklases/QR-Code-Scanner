@@ -1,12 +1,23 @@
 #include <iostream>
 #include <ctime>
-#include <windows.h>
-#include <shellapi.h>
+#include <cstdio>
+
 #include <opencv2/opencv.hpp>
 #include "../Header/ImageBinarization.hpp"
 #include "../Header/Filesystem.hpp"
 #include "../Header/Generator.hpp"
 #include "../Header/CodeFinder.hpp"
+
+
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+#define SystemOpenURL(url) std::system( ("start " + url).c_str() );
+#elif __APPLE__
+#define SystemOpenURL(url) std::system( ("open " + url).c_str() );
+#elif __linux__
+#define SystemOpenURL(url) std::system( ("xdg-open" + url).c_str() );
+#else
+#error "Unknown compiler"
+#endif
 
 
 using namespace std;
@@ -136,11 +147,7 @@ void cameraMode() {
 				cin >> confirm;
 				if (confirm == 'y' || confirm == 'Y')
 				{	
-					// Initializing an object of wstring
-					wstring temp = wstring(decodedText.begin(), decodedText.end());
-					// Applying c_str() method on temp
-					LPCWSTR wideString = temp.c_str();
-					ShellExecute(0, 0, wideString, 0, 0, SW_SHOW);
+					SystemOpenURL(decodedText);
 				}
 			}
 			break;
@@ -176,11 +183,11 @@ void folderMode(const string &source) {
 	}
 	cout << endl;
 
-	//char confirm;
+	char confirm {};
 	cout << "Do you want to read all these files and test QR-Code Algorithm? If yes press 'y':  ";
-	//cin >> confirm;
+	cin >> confirm;
 
-	//if (confirm == 'y') {
+	if (confirm == 'y') {
 		cout << "Now start iterating through all Images.." << endl;
 		float evaluateAverage = 0;
 		float detected = 0;
@@ -228,10 +235,10 @@ void folderMode(const string &source) {
 			average = evaluateAverage / evaluateCount;
 		cout << "#Images: " << imageFiles.size() << " #QRCodesDetected: " << detected <<
 			" #CorrectSize: " << evaluateCount << " AverageQuality: " << average << "%" << endl;
-	//}
-	//else {
-	//	cout << endl << "Aborted." << endl << endl;
-	//}
+	}
+	else {
+		cout << endl << "Aborted." << endl << endl;
+	}
 }
 
 /**
