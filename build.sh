@@ -27,4 +27,4 @@ sudo ldconfig -v
 
 # Premake & make
 cd ../.. && build/premake-5.0.0-beta2-linux/premake5 --file=./build/premake5.lua gmake
-cd build && make
+cd build && make config=release_static64

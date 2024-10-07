@@ -94,10 +94,6 @@ Mat CodeFinder::find() {
 	cout << "Converting image to binary image..." << endl;
 	Mat grayscaleImage;
 	cvtColor(image, grayscaleImage, CV_BGR2GRAY);
-	// DEBUG
-	//cv::imshow("grayscale", grayscaleImage);
-	//cv::waitKey();
-
 
 	ImageBinarization binarizer;
 	int thresholdMethod = -1;
@@ -584,15 +580,13 @@ bool CodeFinder::findMergedLines(QRCode &code) {
  * \param code Code containing merged lines.
  */
 void CodeFinder::findCorners(QRCode &code) {
-	cout << "XXXXXXXXXX" << endl;   // DEBUG
-	code.corners = Mat(4, 4, CV_32FC2);// DataType<Point2f>::type);    versus    CV_32FC2
+	code.corners = Mat(4, 4, CV_32FC2);
 	for (int a = 0; a < code.hLines.size(); a++) {
 		for (int b = 0; b < code.vLines.size(); b++) {
 			Point2f result;
 			if (lineIntersection(code.hLines[a], code.vLines[b], result))
 			{
 				code.corners.at<Point2f>(a, b) = result;
-				cout << code.corners.at<Point2f>(a, b) << endl;   // DEBUG
 			}
 		}
 	}
@@ -611,7 +605,6 @@ void CodeFinder::findPerspectiveTransform(QRCode &code)
 	sourceQuad.push_back(code.corners.at<Point2f>(3, 0));
 	sourceQuad.push_back(code.corners.at<Point2f>(0, 3));
 	sourceQuad.push_back(code.corners.at<Point2f>(3, 3));
-	cout << sourceQuad;  // DEBUG
 	//Check if points are negative
 	for (Point2f p : sourceQuad) {
 		if (p.x < 0 || p.y < 0) {
