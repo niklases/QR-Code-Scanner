@@ -1,5 +1,7 @@
 #### Fork of QR-Code-Scanner 
-forked from https://github.com/PhilS94/QR-Code-Scanner.
+forked from https://github.com/PhilS94/QR-Code-Scanner, which was written by Philipp Schofield, Armin Wolf, Christian Esch.
+
+---
 
 For Windows systems, a Visual Studio (VS 2022) Project Solution (.sln) can be build using Premake running/double clicking the file *build.bat*. Further, pre-compiled libraries of OpenCV are downloaded from GitHub and extracted. The Solution file can subsequently be used to compile this projects source files and to link against the OpenCV library files to successfully run the built *QRCode.exe*.
 
